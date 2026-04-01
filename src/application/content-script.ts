@@ -6,7 +6,7 @@ async function clip(): Promise<void> {
   const result = convertToMarkdown(document);
 
   if (!result.ok) {
-    chrome.runtime.sendMessage({
+    void chrome.runtime.sendMessage({
       type: "clip-error",
       error: result.error.message,
     });
@@ -30,7 +30,7 @@ async function clip(): Promise<void> {
 
   const filename = generateFilename(document.title, new Date());
 
-  chrome.runtime.sendMessage({
+  void chrome.runtime.sendMessage({
     type: "clip-success",
     markdown,
     filename,

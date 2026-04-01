@@ -22,7 +22,7 @@ type ClipMessage = ClipSuccess | ClipError;
 
 chrome.runtime.onMessage.addListener((message: ClipMessage) => {
   if (message.type === "clip-error") {
-    void chrome.notifications.create({
+    chrome.notifications.create({
       type: "basic",
       iconUrl: "icon-128.png",
       title: "Paperclip",
@@ -31,22 +31,20 @@ chrome.runtime.onMessage.addListener((message: ClipMessage) => {
     return;
   }
 
-  if (message.type === "clip-success") {
-    const blob = new Blob([message.markdown], { type: "text/markdown" });
-    const url = URL.createObjectURL(blob);
+  const blob = new Blob([message.markdown], { type: "text/markdown" });
+  const url = URL.createObjectURL(blob);
 
-    void chrome.storage.sync.get({ downloadFolder: "" }).then((settings) => {
-      const downloadOptions: chrome.downloads.DownloadOptions = {
-        url,
-        filename: settings.downloadFolder
-          ? `${settings.downloadFolder}/${message.filename}`
-          : message.filename,
-        saveAs: false,
-      };
+  void chrome.storage.sync.get({ downloadFolder: "" }).then((settings) => {
+    const downloadOptions: chrome.downloads.DownloadOptions = {
+      url,
+      filename: settings.downloadFolder
+        ? `${settings.downloadFolder}/${message.filename}`
+        : message.filename,
+      saveAs: false,
+    };
 
-      void chrome.downloads.download(downloadOptions, () => {
-        URL.revokeObjectURL(url);
-      });
+    chrome.downloads.download(downloadOptions, () => {
+      URL.revokeObjectURL(url);
     });
-  }
+  });
 });

@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(ls -la /c/projects/experiments/send-to-kindle/.eslintrc*)",
+      "Bash(git:*)",
+      "Bash(npm install:*)",
+      "Bash(npx tsc:*)",
+      "Bash(npx vitest:*)",
+      "Bash(npx eslint:*)",
+      "Bash(npx tsx:*)"
+    ]
+  }
+}

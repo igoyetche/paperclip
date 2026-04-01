@@ -1,0 +1,29 @@
+{
+  "manifest_version": 3,
+  "name": "Paperclip",
+  "description": "Convert any web page to a clean Markdown file",
+  "version": "0.1.0",
+  "permissions": [
+    "activeTab",
+    "scripting",
+    "downloads",
+    "notifications",
+    "storage"
+  ],
+  "action": {
+    "default_title": "Clip this page to Markdown"
+  },
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  },
+  "options_ui": {
+    "page": "options.html",
+    "open_in_tab": false
+  },
+  "icons": {
+    "16": "icon-16.png",
+    "48": "icon-48.png",
+    "128": "icon-128.png"
+  }
+}

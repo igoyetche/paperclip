@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <style>
+    body {
+      font-family: system-ui, sans-serif;
+      padding: 16px;
+      min-width: 320px;
+      font-size: 14px;
+      color: #333;
+    }
+    h2 {
+      font-size: 16px;
+      margin: 0 0 16px;
+    }
+    label {
+      display: block;
+      margin-bottom: 12px;
+    }
+    input[type="text"] {
+      display: block;
+      width: 100%;
+      margin-top: 4px;
+      padding: 6px 8px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-sizing: border-box;
+    }
+    .saved {
+      color: #2e7d32;
+      font-size: 12px;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    .saved.visible {
+      opacity: 1;
+    }
+  </style>
+</head>
+<body>
+  <h2>Paperclip Settings</h2>
+
+  <label>
+    <input type="checkbox" id="includeMetadata" checked>
+    Include metadata header (title, URL, date)
+  </label>
+
+  <label>
+    Download folder
+    <input type="text" id="downloadFolder" placeholder="Leave empty for browser default">
+  </label>
+
+  <span class="saved" id="saved">Settings saved</span>
+
+  <script src="options.js"></script>
+</body>
+</html>

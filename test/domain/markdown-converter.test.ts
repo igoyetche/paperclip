@@ -49,6 +49,80 @@ describe("convertToMarkdown", () => {
     expect(result.error.kind).toBe("extraction");
   });
 
+  it("unescapes footnote-style brackets", () => {
+    const html = `<html><body><article>
+      <h1>Essay</h1>
+      <p>${"x ".repeat(50)}</p>
+      <p><b>Notes</b></p>
+      <p>[1] First footnote about something important.</p>
+      <p>[2] Second footnote with more detail.</p>
+    </article></body></html>`;
+
+    const result = convertToMarkdown(htmlToDocument(html));
+
+    expect(result.ok).toBe(true);
+    if (!result.ok) return;
+
+    expect(result.value).toContain("[1]");
+    expect(result.value).toContain("[2]");
+    expect(result.value).not.toContain("\\[");
+  });
+
+  it("strips inline footnote links when brackets are inside the anchor", () => {
+    const html = `<html><body><article>
+      <h1>Essay</h1>
+      <p>${"x ".repeat(50)}</p>
+      <p>Something interesting. <a href="#f1n">[1]</a></p>
+      <p>Another point here. <a href="#f2n">[2]</a></p>
+    </article></body></html>`;
+
+    const result = convertToMarkdown(htmlToDocument(html));
+
+    expect(result.ok).toBe(true);
+    if (!result.ok) return;
+
+    expect(result.value).toContain("[1]");
+    expect(result.value).toContain("[2]");
+    expect(result.value).not.toContain("#f1n");
+    expect(result.value).not.toContain("#f2n");
+  });
+
+  it("strips inline footnote links when brackets are outside the anchor", () => {
+    const html = `<html><body><article>
+      <h1>Essay</h1>
+      <p>${"x ".repeat(50)}</p>
+      <p>Something interesting. [<a href="#f1n">1</a>]</p>
+      <p>Another point here. [<a href="#f2n">2</a>]</p>
+    </article></body></html>`;
+
+    const result = convertToMarkdown(htmlToDocument(html));
+
+    expect(result.ok).toBe(true);
+    if (!result.ok) return;
+
+    expect(result.value).toContain("[1]");
+    expect(result.value).toContain("[2]");
+    expect(result.value).not.toContain("#f1n");
+    expect(result.value).not.toContain("#f2n");
+  });
+
+  it("preserves Markdown links when unescaping footnotes", () => {
+    const html = `<html><body><article>
+      <h1>Article</h1>
+      <p>${"x ".repeat(50)}</p>
+      <p>Read more at <a href="https://example.com">this link</a> for details.</p>
+      <p>[1] A footnote reference.</p>
+    </article></body></html>`;
+
+    const result = convertToMarkdown(htmlToDocument(html));
+
+    expect(result.ok).toBe(true);
+    if (!result.ok) return;
+
+    expect(result.value).toContain("[this link](https://example.com/)");
+    expect(result.value).toContain("[1]");
+  });
+
   it("returns ExtractionError for non-article pages", () => {
     const result = convertToMarkdown(htmlToDocument("<html><body><nav>Just nav</nav></body></html>"));
 

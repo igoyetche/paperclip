@@ -33,8 +33,15 @@ export function convertToMarkdown(doc: Document): Result<string, ExtractionError
   }
 
   const raw = turndown.turndown(article.content);
-  // Normalize list items: replace "- " followed by extra spaces with "- "
-  const markdown = raw.replace(/^(-|\*|\d+\.) {2,}/gm, "$1 ").trim();
+  const markdown = raw
+    // Normalize list items: replace "- " followed by extra spaces with "- "
+    .replace(/^(-|\*|\d+\.) {2,}/gm, "$1 ")
+    // Strip inline footnote links: \[[1](#f1n)\] or [\[1\]](#f1n) → [1]
+    .replace(/\\\[\[(\d+)\]\([^)]*\)\\\]/g, "[$1]")
+    .replace(/\[\\\[(\d+)\\\]\]\([^)]*\)/g, "[$1]")
+    // Unescape footnote-style brackets: \[1\] or \[\n\n1\] → [1]
+    .replace(/\\\[\s*(\d+)\\\]/g, "[$1]")
+    .trim();
 
   if (markdown.length < 20) {
     return err(new ExtractionError("Could not extract article content from this page"));

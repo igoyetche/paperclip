@@ -31,8 +31,9 @@ chrome.runtime.onMessage.addListener((message: ClipMessage) => {
     return;
   }
 
-  const blob = new Blob([message.markdown], { type: "text/markdown" });
-  const url = URL.createObjectURL(blob);
+  const encoded = new TextEncoder().encode(message.markdown);
+  const binary = Array.from(encoded, (b) => String.fromCodePoint(b)).join("");
+  const url = "data:text/markdown;base64," + btoa(binary);
 
   void chrome.storage.sync.get({ downloadFolder: "" }).then((settings) => {
     const downloadOptions: chrome.downloads.DownloadOptions = {
@@ -43,8 +44,6 @@ chrome.runtime.onMessage.addListener((message: ClipMessage) => {
       saveAs: false,
     };
 
-    chrome.downloads.download(downloadOptions, () => {
-      URL.revokeObjectURL(url);
-    });
+    void chrome.downloads.download(downloadOptions);
   });
 });

@@ -123,6 +123,87 @@ describe("convertToMarkdown", () => {
     expect(result.value).toContain("[1]");
   });
 
+  it("removes zero-width joiners that create empty bold markers", () => {
+    const html = `<html><body><article>
+      <h1>Article</h1>
+      <p>${"x ".repeat(50)}</p>
+      <p>Some text.<strong>\u200D</strong></p>
+      <p><strong>\u200D</strong>More text here.</p>
+    </article></body></html>`;
+
+    const result = convertToMarkdown(htmlToDocument(html));
+
+    expect(result.ok).toBe(true);
+    if (!result.ok) return;
+
+    expect(result.value).toContain("Some text.");
+    expect(result.value).toContain("More text here.");
+    expect(result.value).not.toContain("**");
+  });
+
+  it("fixes bold with leading whitespace inside strong tags", () => {
+    const html = `<html><body><article>
+      <h1>Article</h1>
+      <p>${"x ".repeat(50)}</p>
+      <p><strong>  \nThis is important.</strong> And this is not.</p>
+    </article></body></html>`;
+
+    const result = convertToMarkdown(htmlToDocument(html));
+
+    expect(result.ok).toBe(true);
+    if (!result.ok) return;
+
+    expect(result.value).toContain("**This is important.**");
+  });
+
+  it("merges closing ** from its own line to previous line", () => {
+    const html = `<html><body><article>
+      <h1>Article</h1>
+      <p>${"x ".repeat(50)}</p>
+      <p><strong>Important heading<br></strong></p>
+    </article></body></html>`;
+
+    const result = convertToMarkdown(htmlToDocument(html));
+
+    expect(result.ok).toBe(true);
+    if (!result.ok) return;
+
+    expect(result.value).toContain("**Important heading**");
+    expect(result.value).not.toMatch(/^\s*\*\*\s*$/m);
+  });
+
+  it("merges opening ** from its own line to next line", () => {
+    const html = `<html><body><article>
+      <h1>Article</h1>
+      <p>${"x ".repeat(50)}</p>
+      <p><strong><br>This is bold.</strong></p>
+    </article></body></html>`;
+
+    const result = convertToMarkdown(htmlToDocument(html));
+
+    expect(result.ok).toBe(true);
+    if (!result.ok) return;
+
+    expect(result.value).toContain("**This is bold.**");
+    expect(result.value).not.toMatch(/^\s*\*\*\s*$/m);
+  });
+
+  it("fixes bold with trailing whitespace inside strong tags", () => {
+    const html = `<html><body><article>
+      <h1>Article</h1>
+      <p>${"x ".repeat(50)}</p>
+      <p><strong>Important heading  \n</strong></p>
+    </article></body></html>`;
+
+    const result = convertToMarkdown(htmlToDocument(html));
+
+    expect(result.ok).toBe(true);
+    if (!result.ok) return;
+
+    expect(result.value).toContain("**Important heading**");
+    expect(result.value).not.toMatch(/\*\*\s+\*\*/);
+  });
+
   it("returns ExtractionError for non-article pages", () => {
     const result = convertToMarkdown(htmlToDocument("<html><body><nav>Just nav</nav></body></html>"));
 

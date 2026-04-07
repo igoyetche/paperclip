@@ -32,7 +32,17 @@ export function convertToMarkdown(doc: Document): Result<string, ExtractionError
     return err(new ExtractionError("Could not extract article content from this page"));
   }
 
-  const raw = turndown.turndown(article.content);
+  const cleanedHtml = article.content
+    // Strip zero-width characters that break Markdown formatting
+    .replace(/[\u200B-\u200D\uFEFF]/g, "")
+    // Remove empty inline formatting elements left behind
+    .replace(/<(strong|b|em|i)>\s*<\/\1>/gi, "")
+    // Move leading whitespace outside inline formatting elements
+    .replace(/<(strong|b|em|i)>(\s+)/gi, "$2<$1>")
+    // Move trailing whitespace outside inline formatting elements
+    .replace(/(\s+)<\/(strong|b|em|i)>/gi, "</$2>$1");
+
+  const raw = turndown.turndown(cleanedHtml);
   const markdown = raw
     // Normalize list items: replace "- " followed by extra spaces with "- "
     .replace(/^(-|\*|\d+\.) {2,}/gm, "$1 ")
@@ -41,6 +51,10 @@ export function convertToMarkdown(doc: Document): Result<string, ExtractionError
     .replace(/\[\\\[(\d+)\\\]\]\([^)]*\)/g, "[$1]")
     // Unescape footnote-style brackets: \[1\] or \[\n\n1\] → [1]
     .replace(/\\\[\s*(\d+)\\\]/g, "[$1]")
+    // Merge closing ** from its own line to end of previous line
+    .replace(/(\S)[ \t]*\n[ \t]*\*\*[ \t]*$/gm, "$1**")
+    // Merge opening ** from its own line to start of next line
+    .replace(/^[ \t]*\*\*[ \t]*\n(?=\S)/gm, "**")
     .trim();
 
   if (markdown.length < 20) {

@@ -21,6 +21,7 @@ async function run(): Promise<void> {
   // Copy static assets to dist
   cpSync("src/shell/manifest.json", "dist/manifest.json");
   cpSync("src/shell/options.html", "dist/options.html");
+  cpSync("src/shell/icons", "dist", { recursive: true });
 
   console.log("Build complete → dist/");
 }

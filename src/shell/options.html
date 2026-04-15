@@ -27,6 +27,12 @@
       border-radius: 4px;
       box-sizing: border-box;
     }
+    .hint {
+      display: block;
+      margin-top: 4px;
+      font-size: 12px;
+      color: #666;
+    }
     .saved {
       color: #2e7d32;
       font-size: 12px;
@@ -47,8 +53,13 @@
   </label>
 
   <label>
-    Download folder
-    <input type="text" id="downloadFolder" placeholder="Leave empty for browser default">
+    Download subfolder
+    <input type="text" id="downloadFolder" placeholder="e.g. Paperboy">
+    <span class="hint">
+      Relative to your browser's Downloads folder. Use forward slashes for
+      nesting (e.g. <code>clips/work</code>). Absolute paths and drive letters
+      are not allowed by the browser. Leave empty to save directly in Downloads.
+    </span>
   </label>
 
   <span class="saved" id="saved">Settings saved</span>

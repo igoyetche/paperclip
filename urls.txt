@@ -1,0 +1,140 @@
+# Introduction
+https://www.promptingguide.ai/introduction
+
+# Settings
+https://www.promptingguide.ai/introduction/settings
+
+# Basics
+https://www.promptingguide.ai/introduction/basics
+
+# Elements of a Prompt
+https://www.promptingguide.ai/introduction/elements
+
+# Tips and Tricks
+https://www.promptingguide.ai/introduction/tips
+
+# Examples
+https://www.promptingguide.ai/introduction/examples
+
+# Techniques
+https://www.promptingguide.ai/techniques
+
+# Zero-shot Prompting
+https://www.promptingguide.ai/techniques/zeroshot
+
+# Few-shot Prompting
+https://www.promptingguide.ai/techniques/fewshot
+
+# Chain-of-Thought Prompting
+https://www.promptingguide.ai/techniques/cot
+
+# Consistency/Self-Consistency
+https://www.promptingguide.ai/techniques/consistency
+
+# Knowledge Generation and Prompting
+https://www.promptingguide.ai/techniques/knowledge
+
+# Prompt Chaining
+https://www.promptingguide.ai/techniques/prompt_chaining
+
+# Tree of Thoughts
+https://www.promptingguide.ai/techniques/tot
+
+# Retrieval Augmented Generation
+https://www.promptingguide.ai/techniques/rag
+
+# Adversarial Prompting
+https://www.promptingguide.ai/prompts/adversarial-prompting
+
+# Jailbreaking
+https://www.promptingguide.ai/prompts/adversarial-prompting/jailbreaking-llms
+
+# Prompt Injection
+https://www.promptingguide.ai/prompts/adversarial-prompting/prompt-injection
+
+# Prompt Leaking
+https://www.promptingguide.ai/prompts/adversarial-prompting/prompt-leaking
+
+# Active-Prompt
+https://www.promptingguide.ai/techniques/activeprompt
+
+# Automatic Prompt Engineering
+https://www.promptingguide.ai/techniques/ape
+
+# Algorithm of Thoughts
+https://www.promptingguide.ai/techniques/art
+
+# Directional Stimulus Prompting
+https://www.promptingguide.ai/techniques/dsp
+
+# Program-Aided Language Models
+https://www.promptingguide.ai/techniques/pal
+
+# ReAct
+https://www.promptingguide.ai/techniques/react
+
+# Reflexion
+https://www.promptingguide.ai/techniques/reflexion
+
+# Multimodal Chain-of-Thought
+https://www.promptingguide.ai/techniques/multimodalcot
+
+# Graph Prompting
+https://www.promptingguide.ai/techniques/graph
+
+# Meta-Prompting
+https://www.promptingguide.ai/techniques/meta-prompting
+
+# Agents
+https://www.promptingguide.ai/agents
+
+# Agents - Introduction
+https://www.promptingguide.ai/agents/introduction
+
+# Agent Components
+https://www.promptingguide.ai/agents/components
+
+# Function Calling
+https://www.promptingguide.ai/agents/function-calling
+
+# Context Engineering
+https://www.promptingguide.ai/agents/context-engineering
+
+# Deep Context Engineering
+https://www.promptingguide.ai/agents/context-engineering-deep-dive
+
+# Deep Agents
+https://www.promptingguide.ai/agents/deep-agents
+
+# Risks and Challenges
+https://www.promptingguide.ai/risks
+
+# Adversarial Attacks
+https://www.promptingguide.ai/risks/adversarial
+
+# Biases
+https://www.promptingguide.ai/risks/biases
+
+# Factuality
+https://www.promptingguide.ai/risks/factuality
+
+# Models
+https://www.promptingguide.ai/models
+
+# GPT-4
+https://www.promptingguide.ai/models/gpt-4
+
+# ChatGPT
+https://www.promptingguide.ai/models/chatgpt
+
+# Claude 3
+https://www.promptingguide.ai/models/claude-3
+
+# Guides
+https://www.promptingguide.ai/guides/optimizing-prompts
+
+# Deep Research
+https://www.promptingguide.ai/guides/deep-research
+
+# Reasoning LLMs
+https://www.promptingguide.ai/guides/reasoning-llms

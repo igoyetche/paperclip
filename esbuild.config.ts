@@ -19,18 +19,29 @@ async function run(): Promise<void> {
     entryNames: "[name]",
   });
 
-  // Build CLI bundle (Node 22, CommonJS)
+  // Build CLI bundle (Node 22, ESM)
   await build({
     entryPoints: ["src/cli-entry.ts"],
     bundle: true,
     outdir: "dist",
     format: "esm",
     target: "node22",
+    platform: "node",
     minify: false,
     sourcemap: true,
     outExtension: { ".js": ".js" },
     outbase: "src",
     entryNames: "cli",
+    external: [
+      "jsdom",
+      "robots-parser",
+      "node:util",
+      "node:fs",
+      "node:path",
+      "node:fs/promises",
+      "node:stream",
+      "node:zlib",
+    ],
   });
 
   // Copy static assets to dist

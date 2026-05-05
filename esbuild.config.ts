@@ -2,6 +2,7 @@ import { build } from "esbuild";
 import { cpSync } from "node:fs";
 
 async function run(): Promise<void> {
+  // Build extension bundles (Chrome 120, ES modules)
   await build({
     entryPoints: [
       "src/application/content-script.ts",
@@ -16,6 +17,20 @@ async function run(): Promise<void> {
     sourcemap: true,
     outExtension: { ".js": ".js" },
     entryNames: "[name]",
+  });
+
+  // Build CLI bundle (Node 22, CommonJS)
+  await build({
+    entryPoints: ["src/cli-entry.ts"],
+    bundle: true,
+    outdir: "dist",
+    format: "esm",
+    target: "node22",
+    minify: false,
+    sourcemap: true,
+    outExtension: { ".js": ".js" },
+    outbase: "src",
+    entryNames: "cli",
   });
 
   // Copy static assets to dist

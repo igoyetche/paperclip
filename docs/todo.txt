@@ -1,0 +1,25 @@
+- Change paperclip icon (include a download arrow to the latest version)
+- Improve doc covers
+
+-also add the .epub to the sent folder
+- Make file name a config based on  Title, Source and Author
+- Where can we store all the logs?
+
+Fix paperclip Download folder issue
+
+- Workflow improvements, Review all workflow and Claude.md file
+Apply harness engineering:
+    + Claude sonar auto sync (doing it locally before creating the PR sounds a good approach)
+    + automatic clean code review before PR
+    + Run tests in github build
+    + Review comments from previous Features and understand why that happened
+        src/infrastructure/converter/markdown-epub-converter.ts
+    + Agentic code review
+
+Do a Feature to fix all the current Sonar issues.
+
+
+Samples for Skill Download:
+https://neuralnetworksanddeeplearning.com/index.html
+https://www.deeplearningbook.org/
+

@@ -15,4 +15,23 @@ export class ConversionError {
   constructor(readonly message: string) {}
 }
 
-export type DomainError = ExtractionError | ConversionError;
+export class UrlListParseError {
+  readonly kind = "url_list_parse" as const;
+  constructor(
+    readonly lineNumber: number,
+    readonly message: string,
+  ) {}
+}
+
+export class FetchError {
+  readonly kind: "http" | "network" | "timeout" | "content_type";
+
+  constructor(
+    kind: "http" | "network" | "timeout" | "content_type",
+    readonly detail?: string | number,
+  ) {
+    this.kind = kind;
+  }
+}
+
+export type DomainError = ExtractionError | ConversionError | UrlListParseError | FetchError;

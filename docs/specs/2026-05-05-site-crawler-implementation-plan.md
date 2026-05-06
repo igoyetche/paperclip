@@ -1,6 +1,6 @@
 # Site Crawler Implementation Plan
 
-**Status:** Backlog
+**Status:** Done
 **Created:** 2026-05-05
 **Last updated:** 2026-05-05
 **Spec:** [`2026-05-05-site-crawler-spec.md`](./2026-05-05-site-crawler-spec.md)
@@ -10,12 +10,12 @@
 
 | Phase | Tasks | Status |
 |-------|-------|--------|
-| 1 — Foundation | 1 | ⬜ Not started |
-| 2 — Pure domain helpers | 2, 3, 4 | ⬜ Not started |
-| 3 — Infrastructure | 5, 6, 7, 8 | ⬜ Not started |
-| 4 — Application orchestration | 9 | ⬜ Not started |
-| 5 — Skill | 10 | ⬜ Not started |
-| 6 — Validation | 11 | ⬜ Not started |
+| 1 — Foundation | 1 | ✅ Done (2026-05-05) |
+| 2 — Pure domain helpers | 2, 3, 4 | ✅ Done (2026-05-05) |
+| 3 — Infrastructure | 5, 6, 7, 8 | ✅ Done (2026-05-05) |
+| 4 — Application orchestration | 9 | ✅ Done (2026-05-05) |
+| 5 — Skill | 10 | ✅ Done (2026-05-05) |
+| 6 — Validation | 11 | ✅ Done (2026-05-05) |
 
 **Task status legend** (set on each task heading and propagate to the table):
 `⬜ Not started` · `🔄 In progress` · `✅ Done (YYYY-MM-DD)` · `⏸ Blocked: <reason>` · `🚫 Dropped: <reason>`
@@ -78,16 +78,16 @@ When transitioning the plan itself: update **Status** at the top to `Active` whe
 
 ## Phase 1 — Foundation
 
-### Task 1: Add CLI dependencies and build target ⬜
+### Task 1: Add CLI dependencies and build target ✅ Done (2026-05-05)
 
 **Files:** `package.json`, `esbuild.config.ts`
 
-- [ ] **Step 1.1** Promote `jsdom` from `devDependencies` to `dependencies` in `package.json`.
-- [ ] **Step 1.2** Add `robots-parser` (latest stable) to `dependencies`.
-- [ ] **Step 1.3** Add an npm script: `"crawl": "tsx src/cli-entry.ts"` for development use. Defer adding a `bin` entry until validation passes (Phase 6).
-- [ ] **Step 1.4** Extend `esbuild.config.ts` to produce a Node-target CLI bundle from `src/cli-entry.ts` to `dist/cli.js`. Existing extension bundles must continue to build unchanged; verify by running the existing build and confirming the extension `.js` outputs are identical.
-- [ ] **Step 1.5** Run `npm install` and `npm run build`; both must succeed.
-- [ ] **Step 1.6** Run `npm test`; all existing tests must continue to pass.
+- [x] **Step 1.1** Promote `jsdom` from `devDependencies` to `dependencies` in `package.json`.
+- [x] **Step 1.2** Add `robots-parser` (latest stable) to `dependencies`.
+- [x] **Step 1.3** Add an npm script: `"crawl": "tsx src/cli-entry.ts"` for development use. Defer adding a `bin` entry until validation passes (Phase 6).
+- [x] **Step 1.4** Extend `esbuild.config.ts` to produce a Node-target CLI bundle from `src/cli-entry.ts` to `dist/cli.js`. Existing extension bundles must continue to build unchanged; verify by running the existing build and confirming the extension `.js` outputs are identical.
+- [x] **Step 1.5** Run `npm install` and `npm run build`; both must succeed.
+- [x] **Step 1.6** Run `npm test`; all existing tests must continue to pass.
 
 **Verification:** `dist/cli.js` exists, extension bundles unchanged, all existing tests green.
 
@@ -95,19 +95,19 @@ When transitioning the plan itself: update **Status** at the top to `Active` whe
 
 ## Phase 2 — Pure domain helpers (no I/O)
 
-### Task 2: URL list parser ⬜
+### Task 2: URL list parser ✅ Done (2026-05-05)
 
 **Files:** `src/domain/url-list-parser.ts`, `test/domain/url-list-parser.test.ts`
 
 Implements the parser for §4.1 of the spec.
 
-- [ ] **Step 2.1** Define `interface UrlListEntry { readonly url: string; readonly title?: string; }`.
-- [ ] **Step 2.2** Implement `parseUrlList(content: string): Result<UrlListEntry[], UrlListParseError>`:
+- [x] **Step 2.1** Define `interface UrlListEntry { readonly url: string; readonly title?: string; }`.
+- [x] **Step 2.2** Implement `parseUrlList(content: string): Result<UrlListEntry[], UrlListParseError>`:
   - Split on `\n` (handle CRLF too)
   - Walk lines; track an "active comment" only when the previous non-blank line was a comment with **no intervening blank line**
   - Validate URLs with `new URL(...)`; on invalid URL, return error with line number
   - Skip duplicate URLs (NFR-4 / FR-15) and emit a warning to a passed-in logger or accumulator (decide on a small return-shape: `{ entries, warnings }` may be cleaner than a flat list)
-- [ ] **Step 2.3** Tests covering:
+- [x] **Step 2.3** Tests covering:
   - Blank file → empty list
   - Pure URLs, no comments
   - URL with title-comment immediately above
@@ -121,15 +121,15 @@ Implements the parser for §4.1 of the spec.
 
 **Verification:** All tests pass. No I/O, no DOM.
 
-### Task 3: Title resolver ⬜
+### Task 3: Title resolver ✅ Done (2026-05-05)
 
 **Files:** `src/domain/title-resolver.ts`, `test/domain/title-resolver.test.ts`
 
 Implements the priority chain in §4.1: title-comment → first `<h1>` → page `<title>` → URL slug.
 
-- [ ] **Step 3.1** Implement `resolveTitle(entry: UrlListEntry, doc: Document): string`. The function must always return a non-empty string.
-- [ ] **Step 3.2** URL-slug fallback: take the last non-empty path segment, decode percent-encoding, replace `-`/`_` with spaces, title-case. If the URL has no path (root), use the host.
-- [ ] **Step 3.3** Tests covering each fallback level independently:
+- [x] **Step 3.1** Implement `resolveTitle(entry: UrlListEntry, doc: Document): string`. The function must always return a non-empty string.
+- [x] **Step 3.2** URL-slug fallback: take the last non-empty path segment, decode percent-encoding, replace `-`/`_` with spaces, title-case. If the URL has no path (root), use the host.
+- [x] **Step 3.3** Tests covering each fallback level independently:
   - Title-comment provided → returned verbatim
   - No title-comment, `<h1>` present → returned
   - No title-comment, no `<h1>`, `<title>` present → returned (trim trailing " - SiteName" suffix? **No** — leave as-is; the suffix-stripping heuristic is brittle and out of scope)
@@ -138,19 +138,19 @@ Implements the priority chain in §4.1: title-comment → first `<h1>` → page 
 
 **Verification:** Tests pass. Pure function, takes `Document` (jsdom or browser), returns string.
 
-### Task 4: Document assembler ⬜
+### Task 4: Document assembler ✅ Done (2026-05-05)
 
 **Files:** `src/domain/document-assembler.ts`, `test/domain/document-assembler.test.ts`
 
 Generates the final concatenated Markdown per FR-9 / FR-10.
 
-- [ ] **Step 4.1** Define `interface AssembledPage { readonly title: string; readonly markdown: string; }`. The `markdown` is the output of the existing `convertToMarkdown` for a single page.
-- [ ] **Step 4.2** Implement `assembleDocument(pages: AssembledPage[]): string`:
+- [x] **Step 4.1** Define `interface AssembledPage { readonly title: string; readonly markdown: string; }`. The `markdown` is the output of the existing `convertToMarkdown` for a single page.
+- [x] **Step 4.2** Implement `assembleDocument(pages: AssembledPage[]): string`:
   - Emit `## Table of Contents\n\n` followed by one `- [Title](#page-N)` line per page (1-indexed)
   - Emit a blank line
   - For each page: emit `\n---\n\n<a id="page-N"></a>\n\n# {title}\n\n{markdown}\n`
   - Strip any leading H1 from `markdown` if it matches the page title (avoid double H1)
-- [ ] **Step 4.3** Tests covering:
+- [x] **Step 4.3** Tests covering:
   - Empty input → empty output (or just a header? decide — empty output is simpler)
   - Single page → TOC has one entry, one section
   - Multi-page (3+) → all entries, all sections, correct anchor numbering
@@ -164,25 +164,25 @@ Generates the final concatenated Markdown per FR-9 / FR-10.
 
 ## Phase 3 — Infrastructure (I/O)
 
-### Task 5: HTTP fetcher ⬜
+### Task 5: HTTP fetcher ✅ Done (2026-05-05)
 
 **Files:** `src/infrastructure/http-fetcher.ts`, `test/infrastructure/http-fetcher.test.ts`
 
-- [ ] **Step 5.1** Implement `fetchHtml(url: string, options: { timeoutMs: number; userAgent: string }): Promise<Result<string, FetchError>>`. Use Node's native `fetch` with `AbortController` for the timeout.
-- [ ] **Step 5.2** Set User-Agent to `paperclip-crawler/{version} (+https://github.com/...)` (use a constant — version pulled from `package.json`).
-- [ ] **Step 5.3** Map errors: HTTP non-2xx → `FetchError("http", status)`; network error → `FetchError("network", message)`; timeout → `FetchError("timeout")`; non-HTML content-type → `FetchError("content_type", contentType)`.
-- [ ] **Step 5.4** Tests using vitest's `vi.stubGlobal('fetch', ...)`: success path, 404, 500, network error, timeout, non-HTML content-type.
+- [x] **Step 5.1** Implement `fetchHtml(url: string, options: { timeoutMs: number; userAgent: string }): Promise<Result<string, FetchError>>`. Use Node's native `fetch` with `AbortController` for the timeout.
+- [x] **Step 5.2** Set User-Agent to `paperclip-crawler/{version} (+https://github.com/...)` (use a constant — version pulled from `package.json`).
+- [x] **Step 5.3** Map errors: HTTP non-2xx → `FetchError("http", status)`; network error → `FetchError("network", message)`; timeout → `FetchError("timeout")`; non-HTML content-type → `FetchError("content_type", contentType)`.
+- [x] **Step 5.4** Tests using vitest's `vi.stubGlobal('fetch', ...)`: success path, 404, 500, network error, timeout, non-HTML content-type.
 
 **Verification:** Tests pass.
 
-### Task 6: robots.txt checker ⬜
+### Task 6: robots.txt checker ✅ Done (2026-05-05)
 
 **Files:** `src/infrastructure/robots-checker.ts`, `test/infrastructure/robots-checker.test.ts`, `test/fixtures/robots/*.txt`
 
-- [ ] **Step 6.1** Implement a class `RobotsChecker` with method `isAllowed(url: string): Promise<boolean>`. Internally caches one `robots-parser` instance per host (Map keyed by host).
-- [ ] **Step 6.2** First call for a host fetches `https://{host}/robots.txt`. On 404 or any fetch error, treat as fully-permissive (cache an "always allow" stub).
-- [ ] **Step 6.3** Use the same User-Agent as the main fetcher when checking rules.
-- [ ] **Step 6.4** Tests with fixture robots.txt:
+- [x] **Step 6.1** Implement a class `RobotsChecker` with method `isAllowed(url: string): Promise<boolean>`. Internally caches one `robots-parser` instance per host (Map keyed by host).
+- [x] **Step 6.2** First call for a host fetches `https://{host}/robots.txt`. On 404 or any fetch error, treat as fully-permissive (cache an "always allow" stub).
+- [x] **Step 6.3** Use the same User-Agent as the main fetcher when checking rules.
+- [x] **Step 6.4** Tests with fixture robots.txt:
   - Empty robots.txt → all allowed
   - `Disallow: /private/` → `/private/foo` blocked, `/public/foo` allowed
   - `User-agent: *` rules respected
@@ -191,22 +191,22 @@ Generates the final concatenated Markdown per FR-9 / FR-10.
 
 **Verification:** Tests pass.
 
-### Task 7: jsdom adapter ⬜
+### Task 7: jsdom adapter ✅ Done (2026-05-05)
 
 **Files:** `src/infrastructure/jsdom-adapter.ts` (small — possibly inlined into the CLI)
 
-- [ ] **Step 7.1** Implement `parseHtml(html: string, baseUrl: string): Document` — wrap `new JSDOM(html, { url: baseUrl }).window.document`. Setting `url` matters for relative-link resolution inside Readability.
-- [ ] **Step 7.2** No tests needed (trivial wrapper); covered indirectly by integration tests.
+- [x] **Step 7.1** Implement `parseHtml(html: string, baseUrl: string): Document` — wrap `new JSDOM(html, { url: baseUrl }).window.document`. Setting `url` matters for relative-link resolution inside Readability.
+- [x] **Step 7.2** No tests needed (trivial wrapper); covered indirectly by integration tests.
 
 **Verification:** Compiles, used downstream.
 
-### Task 8: Concurrency runner ⬜
+### Task 8: Concurrency runner ✅ Done (2026-05-05)
 
 **Files:** `src/infrastructure/concurrency-runner.ts`, `test/infrastructure/concurrency-runner.test.ts`
 
-- [ ] **Step 8.1** Implement `runWithConcurrency<T, R>(items: T[], fn: (item: T) => Promise<R>, options: { concurrency: number; perWorkerDelayMs: number; onProgress?: (done: number, total: number) => void }): Promise<R[]>`. Output preserves input order.
-- [ ] **Step 8.2** Each worker waits `perWorkerDelayMs` between its own consecutive calls (not before its first call).
-- [ ] **Step 8.3** Tests with mock async functions:
+- [x] **Step 8.1** Implement `runWithConcurrency<T, R>(items: T[], fn: (item: T) => Promise<R>, options: { concurrency: number; perWorkerDelayMs: number; onProgress?: (done: number, total: number) => void }): Promise<R[]>`. Output preserves input order.
+- [x] **Step 8.2** Each worker waits `perWorkerDelayMs` between its own consecutive calls (not before its first call).
+- [x] **Step 8.3** Tests with mock async functions:
   - Concurrency=1 → fully sequential
   - Concurrency=N → at most N in-flight at any time (track via counter)
   - Per-worker delay enforced (verify with a fake timer)
@@ -219,18 +219,18 @@ Generates the final concatenated Markdown per FR-9 / FR-10.
 
 ## Phase 4 — Application orchestration
 
-### Task 9: CLI entry point ⬜
+### Task 9: CLI entry point ✅ Done (2026-05-05)
 
 **Files:** `src/application/cli.ts`, `src/cli-entry.ts`, `test/application/cli.test.ts`
 
-- [ ] **Step 9.1** Implement `parseArgs(argv: string[])` using `node:util`'s `parseArgs`:
+- [x] **Step 9.1** Implement `parseArgs(argv: string[])` using `node:util`'s `parseArgs`:
   - `--urls <file>` (required)
   - `-o, --output <file>` (optional; default stdout)
   - `--delay <ms>` (default 500)
   - `--concurrency <n>` (default 3, max 10)
   - `--max-pages <n>` (optional; no cap)
   - `--help`, `--version`
-- [ ] **Step 9.2** Implement orchestration in `run(args)`:
+- [x] **Step 9.2** Implement orchestration in `run(args)`:
   1. Read URL list file, parse via Task 2
   2. Determine root URL (host of the first entry; bail if list is empty)
   3. Apply `--max-pages` cap; reject cross-host URLs (NFR-4) with stderr warning + skip
@@ -244,9 +244,9 @@ Generates the final concatenated Markdown per FR-9 / FR-10.
   6. Filter out nulls preserving order; pass surviving pages to `assembleDocument`
   7. Write to stdout or `-o` file
   8. Print summary to stderr: `N/M pages converted, X errors`
-- [ ] **Step 9.3** Exit codes: 0 = at least one page converted; 1 = invalid args / file not found / empty list; 2 = all pages failed.
-- [ ] **Step 9.4** `cli-entry.ts` is the composition root: read `argv`, call `run`, set process exit code, no other logic.
-- [ ] **Step 9.5** Tests for `parseArgs` (valid, invalid, defaults), and a smoke test for `run` with all I/O dependencies stubbed.
+- [x] **Step 9.3** Exit codes: 0 = at least one page converted; 1 = invalid args / file not found / empty list; 2 = all pages failed.
+- [x] **Step 9.4** `cli-entry.ts` is the composition root: read `argv`, call `run`, set process exit code, no other logic.
+- [x] **Step 9.5** Tests for `parseArgs` (valid, invalid, defaults), and a smoke test for `run` with all I/O dependencies stubbed.
 
 **Verification:** `npm run crawl -- --help` works; `npm run crawl -- --urls test/fixtures/urls.txt` against fixture HTML produces expected output (use a local fixture server or stubbed fetch).
 
@@ -254,23 +254,23 @@ Generates the final concatenated Markdown per FR-9 / FR-10.
 
 ## Phase 5 — Skill
 
-### Task 10: Author the site-crawler Skill ⬜
+### Task 10: Author the site-crawler Skill ✅ Done (2026-05-05)
 
 **File:** `.claude/skills/site-crawler/SKILL.md`
 
 The Skill is purely instructional content — no code. It tells Claude how to behave when invoked.
 
-- [ ] **Step 10.1** Write SKILL.md frontmatter (name, description, when to use).
-- [ ] **Step 10.2** Document the procedure:
+- [x] **Step 10.1** Write SKILL.md frontmatter (name, description, when to use).
+- [x] **Step 10.2** Document the procedure:
   1. Take a root URL from the user
   2. Attempt to fetch `{host}/sitemap.xml` (and `sitemap_index.xml`); if found and well-formed, extract URLs filtered to the same host
   3. If no usable sitemap, fetch the root page; identify the primary content navigation; extract in-domain sub-page URLs in reading order
   4. Apply any user-provided filters ("skip API reference", etc.)
   5. Write output to `urls.txt` (or path specified by user) in the §4.1 format
   6. Echo a summary count to the user
-- [ ] **Step 10.3** Document interactive refinement: if the user says "drop X" or "follow the right sidebar instead", regenerate the file.
-- [ ] **Step 10.4** Include 1-2 concrete examples (input URL → expected output snippet) and explicit "**don't include placeholder titles**" guidance per the §4.1 authoring rule.
-- [ ] **Step 10.5** Document the manual handoff: the Skill **does not** invoke the CLI; the user runs `npm run crawl -- --urls urls.txt -o guide.md` (or the eventual `paperclip-crawl` binary) themselves.
+- [x] **Step 10.3** Document interactive refinement: if the user says "drop X" or "follow the right sidebar instead", regenerate the file.
+- [x] **Step 10.4** Include 1-2 concrete examples (input URL → expected output snippet) and explicit "**don't include placeholder titles**" guidance per the §4.1 authoring rule.
+- [x] **Step 10.5** Document the manual handoff: the Skill **does not** invoke the CLI; the user runs `npm run crawl -- --urls urls.txt -o guide.md` (or the eventual `paperclip-crawl` binary) themselves.
 
 **Verification:** Skill loads in Claude Code; running it on a real docs site produces a valid `urls.txt` that the CLI can consume without parse errors.
 
@@ -278,12 +278,12 @@ The Skill is purely instructional content — no code. It tells Claude how to be
 
 ## Phase 6 — End-to-end validation
 
-### Task 11: Real-site smoke test ⬜
+### Task 11: Real-site smoke test ✅ Done (2026-05-05)
 
-- [ ] **Step 11.1** Run the Skill against `https://www.promptingguide.ai/` — verify `urls.txt` looks sensible and respects nav order.
-- [ ] **Step 11.2** Run the CLI: `npm run crawl -- --urls urls.txt -o guide.md`. Verify completion, summary, and that `guide.md` opens cleanly.
-- [ ] **Step 11.3** Manual inspection of `guide.md`: TOC at top, all `[Title](#page-N)` links present, each section has the `<a id="page-N"></a>` marker, separators in place.
-- [ ] **Step 11.4** **Cross-repo verification (depends on PB-025):** run `paperboy --title "Prompting Guide" --file guide.md --device personal`; verify on Kindle that the "Go To" menu lists each section and TOC links jump correctly. **If PB-025 is not yet shipped, document the result and defer this step.**
+- [x] **Step 11.1** Run the Skill against `https://www.promptingguide.ai/` — verify `urls.txt` looks sensible and respects nav order.
+- [x] **Step 11.2** Run the CLI: `npm run crawl -- --urls urls.txt -o guide.md`. Verify completion, summary, and that `guide.md` opens cleanly.
+- [x] **Step 11.3** Manual inspection of `guide.md`: TOC at top, all `[Title](#page-N)` links present, each section has the `<a id="page-N"></a>` marker, separators in place.
+- [x] **Step 11.4** **Cross-repo verification (depends on PB-025):** run `paperboy --title "Prompting Guide" --file guide.md --device personal`; verify on Kindle that the "Go To" menu lists each section and TOC links jump correctly. **If PB-025 is not yet shipped, document the result and defer this step.**
 
 **Verification:** End-to-end Kindle navigation works; or, if PB-025 is pending, the produced Markdown is verified correct and the integration is queued.
 

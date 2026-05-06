@@ -1,7 +1,6 @@
 ---
 name: site-crawler
 description: Discover and order sub-pages of a documentation site, producing a URL list for the Paperclip CLI
-_note: "Authoritative version at docs/skills/site-crawler.md — keep in sync"
 ---
 
 # Site Crawler Skill
